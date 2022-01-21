@@ -1,0 +1,1 @@
+inst/sqlite/CompDb.Hsapiens.HMDB.5.0.sqlite filter=lfs diff=lfs merge=lfs -text
