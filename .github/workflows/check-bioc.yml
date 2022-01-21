@@ -178,6 +178,7 @@ jobs:
           ## Ideally, all dependencies should get installed in the first pass.
           BiocManager::install("rmarkdown", dependencies = TRUE, ask = FALSE, update = FALSE)
           BiocManager::install("BiocStyle", dependencies = TRUE, ask = FALSE, update = FALSE)
+          BiocManager::install("msdata", dependencies = TRUE, ask = FALSE, update = FALSE)
 
           ## Pass #1 at installing dependencies
           message(paste('****', Sys.time(), 'pass number 1 at installing dependencies: local dependencies ****'))
