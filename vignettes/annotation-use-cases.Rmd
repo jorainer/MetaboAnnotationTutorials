@@ -4,6 +4,12 @@ author: "Johannes Rainer, Andrea Vicini, Liesa Salzer, Jan Stanstrup, Josep M Ba
 graphics: yes
 output:
   rmarkdown::html_document
+vignette: >
+  %\VignetteIndexEntry{Use Cases for Metabolomics Data Annotation Using MetaboAnnotation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding[utf8]{inputenc}
+  %\VignettePackage{MetaboAnnotationTutorials}
+  %\VignetteDepends{xcms,Spectra,CompoundDb,pander,BiocStyle,MetaboAnnotation}
 bibliography: references.bib
 ---
 
