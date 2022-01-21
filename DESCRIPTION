@@ -28,9 +28,12 @@ Encoding: UTF-8
 LazyData: false
 Roxygen: list(markdown = TRUE)
 Depends:
-    R (>= 4.1)
-Suggests:
+    R (>= 4.1),
+    MetaboAnnotation,
     Spectra,
+    CompoundDb,
+    xcms
+Suggests:
     Biobase,
     BiocStyle,
     knitr,
@@ -38,11 +41,8 @@ Suggests:
     pkgdown,
     mzR,
     MsBackendMgf,
-    CompoundDb,
     pander,
-    xcms,
-    msdata,
-    MetaboAnnotation
+    msdata
 Remotes:
     RforMassSpectrometry/CompoundDb,
     RforMassSpectrometry/MetaboAnnotation
