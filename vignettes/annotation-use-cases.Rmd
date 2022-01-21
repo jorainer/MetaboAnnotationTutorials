@@ -1,0 +1,610 @@
+---
+title: "Use Cases for Metabolomics Data Annotation Using MetaboAnnotation"
+author: "Johannes Rainer, Andrea Vicini, Liesa Salzer, Jan Stanstrup, Josep M Badia,  \nSteffen Neumann, Michael Stravs, Vinicius Verri Hernandes, Laurent Gatto, Sebastian Gibb  \nand Michael Witting"
+graphics: yes
+output:
+  rmarkdown::html_document
+bibliography: references.bib
+---
+
+```{r biocstyle, echo = FALSE, message = FALSE }
+library(BiocStyle)
+library(knitr)
+opts_chunk$set(message = FALSE, warning = FALSE, fig.width = 8, fig.height = 7,
+               dev = c("png"))
+## BiocStyle::markdown()
+```
+
+This documents provides use cases describing the annotation of untarget
+metabolomics and small compound datasets using functionality from the
+`r Biocpkg("MetaboAnnotation")`, `r Biocpkg("MetaboCoreUtils")` and
+`r Biocpkg("CompoundDb")` packages. All data used in this document is available
+within the [github
+repository](https://github.com/jorainer/annotation_ecosystem)
+https://github.com/jorainer/annotation_ecosystem. Additional use cases and
+examples can be found in the packages' vignettes and workshops/tutorials. See
+section *Package repositories and additional tutorials* for links to the package
+repositories and tutorials.
+
+# Installation instructions
+
+The R packages used in this document can be installed with the R code below:
+
+```{r, eval = FALSE}
+install.packages("BiocManager")
+BiocManager::install(c("xcms", "pander"))
+BiocManager::install(c("Spectra", "MsCoreUtils", "MetaboCoreUtils"))
+BiocManager::install("RforMassSpectrometry/CompoundDb")
+BiocManager::install("RforMassSpectrometry/MetaboAnnotation")
+```
+
+The source code for this document along with the test data can be downloaded
+from the github repository https://github.com/jorainer/annotation_ecosystem with
+the command (or alternatively downloading the zip archive directly from the
+github page; note that [git-lfs](https://git-lfs.github.com/) needs to be
+installed for the command below to work).
+
+```
+git clone https://github.com/jorainer/annotation_ecosystem
+```
+
+# $MS^1$ annotation
+
+In this example we annotate chromatographic peaks identified in a test sample
+provided within this repository first based only on their *m/z* values and then
+using their *m/z* and retention times against previously determined values for a
+set of pure standards. The test data represents LC-MS/MS measurements of a set
+of metabolite standards. In brief, aliquots for pure standards of 15 metabolites
+were solved in water and injected into a LC-MS system. Details are provided in
+the Material and Methods section in the main text.
+
+Below we load the data which is distributed within the
+`MetaboAnnotationTutorials` package and perform the chromatographic peak
+detection using the `r Biocpkg("xcms")` package.
+
+```{r}
+library(xcms)
+
+fl <- system.file("mzML", "HighIS_Mix07_CE20_POS.mzML",
+                  package = "MetaboAnnotationTutorials")
+
+std_data <- readMSData(fl, mode = "onDisk")
+```
+
+We next perform the chromatographic peak detection using the *centWave*
+algorithm followed by a *peak refinement* to reduce the number of peak detection
+artifacts, such as split-peaks or overlapping peaks (see the *LC-MS/MS data
+analysis with xcms* vignette from the `xcms` package for details on the
+chromatographic peak detection settings).
+
+```{r}
+#' Peak detection
+cwp <- CentWaveParam(snthresh = 10, prefilter = c(3, 4000), ppm = 40,
+                     peakwidth = c(2, 8), integrate = 2)
+std_data <- findChromPeaks(std_data, param = cwp)
+#' Peak refinement
+std_data <- refineChromPeaks(
+    std_data, MergeNeighboringPeaksParam(expandRt = 3))
+```
+
+In total `r nrow(chromPeaks(std_data))` chromatographic peaks have been
+identified. This is even more than would be expected since the sample represents
+a mixture of 15 pure standards solved in water. Below we display the first 6 of
+the detected chromatographic peaks.
+
+```{r}
+head(chromPeaks(std_data))
+```
+
+We next annotate these chromatographic peaks using only their *m/z* values. As a
+reference we load a `CompDb` database containing all compounds from the Human
+Metabolom Database [@wishartHMDBHumanMetabolome2018] version 5.0 which is also
+provided within the `MetaboAnnotationTutorials` package. Such annotation
+resources can be created with the `r Biocpkg("CompoundDb")` package (see the
+[package documentation](https://RforMassSpectrometry.github.io/CompoundDb) for
+more information).
+
+```{r}
+library(CompoundDb)
+
+fl <- system.file("sqlite", "CompDb.Hsapiens.HMDB.5.0.sqlite",
+                  package = "MetaboAnnotationTutorials")
+#' Load a CompDb database with compound annotation from HMDB
+cdb <- CompDb(fl)
+cdb
+```
+
+**Note**: while we are here annotating chromatographic peaks from an `xcms`
+result object, it would also be possible to annotate LC-MS features using the
+same approach by simply exchanging the `chromPeaks` call with
+`featureDefinitions`. In addition, the annotation could also be performed on a
+`SummarizedExperiment` representing the preprocessing results which can be
+generated from an `xcms` result object using the `quantify` method.
+
+
+## Annotation using *m/z* values
+
+We next extract all peaks from the `xcms` result object and annotate them using
+the `matchMz` function against all compounds from HMDB (the compound annotations
+can be extracted from the `CompDb` database with the `compounds` function). The
+reference database does not provide *m/z* values but only exact masses for each
+compound. Thus, in order to annotate our chromatographic peaks' *m/z* values,
+*m/z* values for expected ions of the compounds need to be calculated
+first. With `Mass2MzParam` we can configure the parameters for the
+annotation. Parameter `adducts` allows to specify the adducts (ions) we expect
+to see mostly in the data set. For our example we assume to see mostly `[M+H]+`
+and `[M+Na]+` positive ions. With parameters `tolerance` and `ppm` we can
+finally define also the absolute and/or *m/z* relative acceptable difference,
+respectively, for *m/z* values to be considered matching.
+
+```{r}
+library(MetaboAnnotation)
+
+#' Get the chromatographic peaks and add a column with the peak_id
+pks <- data.frame(peak_id = rownames(chromPeaks(std_data)),
+                  chromPeaks(std_data))
+
+#' Set parameters for the m/z-based annotation
+param <- Mass2MzParam(adducts = c("[M+H]+", "[M+Na]+"),
+                      tolerance = 0, ppm = 10)
+
+#' Perform the matching
+pks_match <- matchMz(
+    pks,
+    compounds(cdb, c("compound_id", "exactmass", "formula", "name")),
+    param = param)
+
+pks_match
+```
+
+The result object handles the potential many-to-many matching between
+chromatographic peaks (*query*) and reference (*target*) and contains all
+information from both the query and the target object along with the *score* for
+the match (in this case the difference between the *m/z* values). Below we list
+all available information in the result object.
+
+```{r}
+colnames(pks_match)
+```
+
+The n:m mapping is represented in the `matches` data frame. It maps each
+annotated query element to all matching target elements. Below we list the first
+6 rows from that table. Column `"score"` provides the difference between the
+query and target *m/z* values (in Da).
+
+```{r}
+head(matches(pks_match))
+```
+
+For users it's however more convenient to extract annotation information with
+the `matchedData` function, that will return a data frame with all
+annotations. If query elements are annotated to more than one target element
+they will be listed in as many rows as there are matches. Not matching query
+elements are represented with a single row in the result table, containing `NA`
+for all annotations. Below we extract all annotations, restricting to some of
+the annotation columns.
+
+```{r}
+matchedData(pks_match, c("peak_id", "target_name",
+                         "target_formula", "adduct"))
+```
+
+As we can see, the number of rows of this data frame is much larger than the
+number of chromatographic peaks. Most peaks are in fact annotated to several
+possible compounds based on their *m/z*. The average number of compounds to
+which a chromatographic peak in this data is annotated is calculated below.
+
+```{r}
+matches(pks_match)[, 1] |>
+table() |>
+mean()
+```
+
+Annotations in the result object are organized by query, annotations for
+individual query elements can thus be accessed very easily. Below we list all
+annotations for the first chromatographic peak.
+
+```{r}
+matchedData(pks_match[1], c("peak_id", "target_name",
+                            "target_formula", "adduct"))
+```
+
+All compounds have thus the exact same chemical formula and hence, using only
+the *m/z* value, we can not discriminate between them or determine which would
+be the correct annotation. Considering also the retention times would allow a
+better annotation and increase its confidence.
+
+
+## Annotation using reference *m/z* and retention times
+
+For LC-MS experiments compounds are first chromatographically separated based on
+some property of the compound (other than their mass). Thus, also the retention
+times contain information that can improve the annotation. In this section we
+use information from a previous experiment in which pure standards were measured
+with the same LC-MS setup used to generate the present test data and in which
+the retention time as well as the ion (adduct) and its *m/z* value were
+determined. These reference values were thus empirically determined on the same
+instruments with the same setup and should thus help to get higher confidence
+annotations.
+
+Below we load the reference retention time and *m/z* data for some of the
+measured standards.
+
+```{r}
+fl <- system.file("txt", "std_ions.txt",
+                  package = "MetaboAnnotationTutorials")
+std_ions <- read.table(fl, sep = "\t", header = TRUE)
+head(std_ions)
+```
+
+We can now annotate the chromatographic peaks using this reference data. We
+configure the matching using the `MzRtParam`, which allows to annotate query
+elements based on *m/z* and retention times. With `ppm` we define again the
+*m/z*-relative acceptable difference of the *m/z* values and with `toleranceRt`
+the absolute acceptable difference in measured retention times. The parameters
+`mzColname` and `rtColname` allow us to define the names of the columns in the
+query and target objects containing the *m/z* values and retention time values
+for the matching. Settings for `ppm` and `toleranceRt` should be adapted to the
+experimental setup, retention time difference could e.g. be larger for
+HILIC-based chromatographic separation. Below we use a difference of 7 seconds
+(since retention times in `std_ions` and in the `xcms` result are reported in
+seconds).
+
+```{r}
+param <- MzRtParam(ppm = 10, toleranceRt = 7)
+pks_match <- matchMz(pks, std_ions, param = param,
+                     mzColname = c("mz", "ion_mz"),
+                     rtColname = c("rt", "ion_rt"))
+pks_match
+```
+
+In addition to supplying the reference (target) data as a `data.frame` we could
+also directly use an `IonDb`. This type of annotation object extends the above
+used `CompDb` database providing in addition to general compound annotations
+also information on measured ions including their retention times and *m/z*
+values. It is thus designed to contain reference annotation databases for
+specific LC-MS setups and MS instrumentation used in a lab. Below we create such
+an `IonDb` database (which will be saved in the present example to a temporary
+file) from the HMDB `CompDb` database and add our ion annotations to it.
+
+```{r}
+#' Create an IonDb filling it with data from cdb.
+idb <- IonDb(tempfile(), cdb)
+
+#' Insert measured m/z and retention times for ions
+idb <- insertIon(idb, std_ions)
+idb
+```
+
+The advantage of such an annotation database over individual (text) file-based
+annotation approaches is obvious: along with the annotation data also metadata
+can be saved and the database can be versioned, which is crucial for
+reproducible workflows. Also, the database's SQLite file is portable and can be
+distributed and used on different computers. In addition, it would also be
+possible to use a MySQL-based database system which would enable centralized
+annotation resources in a laboratory. More information on the creation and usage
+of annotation resources with the `CompoundDb` package is provided in its package
+vignettes which are also available
+[here](https://RforMassSpectrometry.github.io/CompoundDb/).
+
+We can now annotate our peaks against that database using the same call as
+above, but providing the `idb` as `target` parameter.
+
+```{r}
+pks_match <- matchMz(
+    pks, ions(idb, c("compound_id", "ion_adduct", "ion_mz", "ion_rt", "name")),
+    param = param, mzColname = c("mz", "ion_mz"),
+    rtColname = c("rt", "ion_rt"))
+pks_match
+```
+
+In total `r length(whichQuery(pks_match))` chromatographic peaks were annotated
+to an ion of one of the standards. We can identify the chromatographic peaks
+with available annotation using the `whichQuery` function, that returns their
+index in the query. Below we thus also subset the matched results to only those
+chromatographics peaks with an annotation.
+
+```{r}
+whichQuery(pks_match)
+
+pks_match <- pks_match[whichQuery(pks_match)]
+```
+
+We next build a result table for the successfully annotated chromatographic
+peaks.
+
+```{r, results = "asis"}
+library(pander)
+pandoc.table(as.data.frame(
+    matchedData(pks_match, c("peak_id", "target_name", "score", "score_rt"))),
+    style = "rmarkdown", split.tables = Inf)
+```
+
+Columns `"score"` and `"score_rt"` contain the difference between the query and
+the annotated target's *m/z* (in Da) and retention time (in seconds),
+respectively.
+
+
+## Annotation using reference *m/z* and retention indices
+
+Retention time is a valuable orthogonal information for metabolite
+identification, but chromatographic conditions are far from being
+standardized. Even when using nominally the same chromatographic system, meaning
+column and eluents, differences in retention times arise due to dead volumes,
+gradient delay volumes, etc. In GC-MS retention time indexing has been used to
+normalize for drifts in retention times by converting them into retention
+indices. A similar approach has been recently described for LC-MS
+[@stoffelNAlkylpyridiniumSulfonatesRetention2021] using N-Alkyl-pyridinium
+sulfonates as retention indexing substances. Their use allows to convert
+retention times into retention indices and to compare retention information
+across different LC-MS systems.
+
+We first load data from an untargeted metabolomic experiments. This data has
+been completely processed. Each feature is identified by a unique name.
+
+```{r}
+library(MetaboCoreUtils)
+
+fl <- system.file("txt", "rti_ms_pos_features.txt",
+                  package = "MetaboAnnotationTutorials")
+ms1_features <- read.table(fl, header = TRUE, sep = "\t")
+head(ms1_features)
+```
+
+Likewise we load the information on the N-Alkyl-pyridinium sulfonates. The
+retention index is defined as the number of carbons in the alkyl chain times
+100.
+
+```{r}
+fl <- system.file("txt", "rti_ms_pos_naps.txt",
+                  package = "MetaboAnnotationTutorials")
+ms1_naps <- read.table(fl, header = TRUE, sep = "\t")
+head(ms1_naps)
+```
+
+The relationship between the retention time and retention index can be plotted.
+
+```{r}
+plot(ms1_naps)
+```
+
+We can use the N-Alkly-pyridinium sulfonates to convert the retention times of
+the measured features using the `indexRtime` function. By default linear
+interpolation is used for conversion, but other (custom) functions can be
+defined if required.
+
+```{r}
+ms1_features$rindex <- indexRtime(ms1_features$rtime, ms1_naps)
+```
+
+This data can then be annotated using reference databases. Two different
+databases are used. One was obtained on a UHPLC column and one on a HPLC column
+of the same column chemistry. The untargeted data was obtained from a HPLC
+column, but using a different LC hardware, resulting in different absolute
+retention times.
+
+```{r}
+fl <- system.file("txt", "rti_db_hplc.txt",
+                  package = "MetaboAnnotationTutorials")
+db_hplc <- read.table(fl, header = TRUE, sep = "\t",
+                      quote = "", comment.char = "")
+
+fl <- system.file("txt", "rti_db_uhplc.txt",
+                  package = "MetaboAnnotationTutorials")
+db_uhplc <- read.table(fl, header = TRUE, sep = "\t",
+                      quote = "", comment.char = "")
+```
+
+Next we can define the `Mass2MzRtParam` similar to above. We will use an
+absolute error of 10 retention index units and use `[M+H]+ `and `[M+Na]+`
+adducts.
+
+```{r}
+match_param <- Mass2MzRtParam(adducts = c("[M+H]+", "[M+Na]+"),
+                              tolerance = 0.005,
+                              toleranceRt = 10)
+```
+
+Matching can now be performed. Important is that the column with the retention
+index needs to be defined using `rtColname`. Matching is performed against both
+databases and results are then filtered to only contain features with at least
+one match.
+
+```{r}
+matches_hplc <- matchMz(ms1_features,
+                        db_hplc,
+                        match_param,
+                        massColname = "exact.mass",
+                        mzColname = "mz",
+                        rtColname = "rindex")
+
+matches_hplc <- matches_hplc[whichQuery(matches_hplc)]
+
+matches_uhplc <- matchMz(ms1_features,
+                         db_uhplc,
+                         match_param,
+                         massColname = "exact.mass",
+                         mzColname = "mz",
+                         rtColname = "rindex")
+
+matches_uhplc <- matches_uhplc[whichQuery(matches_uhplc)]
+
+```
+
+We next build a result table for the successfully annotated chromatographic
+peaks. First for the results matching with the HPLC database.
+
+```{r, results = "asis"}
+library(pander)
+pandoc.table(head(as.data.frame(
+  matchedData(matches_hplc, c("Name", "mz", "rindex", "target_name",
+                              "adduct", "score", "score_rt")))),
+  style = "rmarkdown", split.tables = Inf)
+```
+
+Then for matching with the UPLC database.
+
+```{r, results = "asis"}
+library(pander)
+pandoc.table(head(as.data.frame(
+  matchedData(matches_uhplc, c("Name", "mz", "rindex", "target_name",
+                               "adduct", "score", "score_rt")))),
+  style = "rmarkdown", split.tables = Inf)
+```
+
+
+# $MS^2$ annotation
+
+In addition to $MS^1$ annotation described in the previous section, it is also
+possible to annotate features (or chromatographic peaks) by comparing
+experimentally measured $MS^2$ (MS/MS) spectra against reference spectra. Such
+annotation can be performed using the `matchSpectra` from the `MetaboAnnotation`
+package that takes `Spectra` objects (with $MS^2$ spectra) as query and target
+parameters. Such `Spectra` objects can be either imported from a variety of
+input formats, including MGF, MSP, mzML, mzXML or netCDF files, extracted from
+`xcms` result objects or even retrieved from databases such as *MassBank* (see
+also the tutorials from
+[SpectraTutorials](https://jorainer.github.io/SpectraTutorials/) for more
+examples and use cases).
+
+To illustrate this, we will extract in this section $MS^2$ spectra for the
+annotated chromatographic peaks from the previous section and compare them
+against reference $MS^2$ spectra from HMDB. Annotation reliability can be
+increased if, in addition to *m/z* and retention time, also the $MS^2$ spectra
+for a chromatographic peak or a feature matches the reference spectrum from a
+pure standard.
+
+We first extract all $MS^2$ spectra for the annotated chromatographic peaks
+using the `chromPeakSpectra` function from the `xcms` result object. This will
+return all $MS^2$ spectra with the precursor *m/z* and retention time within the
+*m/z* ranges and retention time ranges of the detected chromatographic
+peaks. For an `xcms` result object containing also correspondence results
+(i.e. grouped chromatographic peaks across samples, also referred to as
+*features*) the `featureSpectra` function could be used instead.
+
+```{r}
+std_spectra <- chromPeakSpectra(std_data, return.type = "Spectra",
+                                peaks = pks_match$peak_id)
+std_spectra
+```
+
+For some of the chromatographic peaks we have more than one $MS^2$ spectrum, but
+in total we have $MS^2$ spectra only for `r length(unique(std_spectra$peak_id))`
+chromatographic peaks. Below we count the number of spectra per peak.
+
+```{r}
+table(std_spectra$peak_id)
+```
+
+Before matching the spectra we are *cleaning* our experimental spectra removing
+peaks with an intensity lower than 5% of a spectra's highest peak intensity and
+removing spectra with less than 3 peaks.
+
+```{r}
+#' Define a function to remove low intensity peaks
+low_int <- function(x, ...) {
+    x > max(x, na.rm = TRUE) * 0.05
+}
+#' Remove peaks with an intensity below 5% of BPI
+std_spectra <- filterIntensity(std_spectra, intensity = low_int)
+
+#' Remove peaks with less than 3 peaks
+std_spectra <- std_spectra[lengths(std_spectra) > 2]
+std_spectra
+```
+
+In addition, we scale the peak intensities within each spectrum to values
+between 0 and 100. This is mostly for visualization reason, since most spectra
+similarity scoring algorithms are independent of absolute peak intensities.
+
+```{r}
+#' Define a function to *scale* the intensities
+scale_int <- function(x, ...) {
+    maxint <- max(x[, "intensity"], na.rm = TRUE)
+    x[, "intensity"] <- 100 * x[, "intensity"] / maxint
+    x
+}
+#' *Apply* the function to the data
+std_spectra <- addProcessing(std_spectra, scale_int)
+```
+
+Below we match now these *cleaned* spectra against the reference spectra from
+HMDB. We configure the matching using the `CompareSpectraParam` allowing *m/z*
+differences of 50ppm between peaks from a query and a target spectrum. Since
+HMDB does not provide precursor *m/z* we in addition have to disable the
+additional matching filter (i.e. set `requirePrecursor = FALSE`), which has
+however a negative impact on the performance of the comparisons. By default,
+spectra similarities (calculated with the normalized dot product) higher than
+0.7 will be considered matching.
+
+```{r}
+spectra_match <- matchSpectra(
+    std_spectra, Spectra(cdb),
+    param = CompareSpectraParam(ppm = 50, requirePrecursor = FALSE))
+spectra_match
+```
+
+Thus, in total `r length(whichQuery(spectra_match))` of the query spectra were
+matched with `r length(whichTarget(spectra_match))`. Below we create a result
+table for this matching.
+
+```{r, results = "asis"}
+res <- spectraData(spectra_match,
+                   c("peak_id", "target_compound_id", "score"))
+cmp_id <- unique(res$target_compound_id)
+cmp_id <- cmp_id[!is.na(cmp_id)]
+cmps <- compounds(cdb, filter = ~ compound_id == cmp_id, "name")
+rownames(cmps) <- cmps$compound_id
+
+res$name <- cmps[res$target_compound_id, "name"]
+rownames(res) <- NULL
+pandoc.table(as.data.frame(res),
+    style = "rmarkdown", split.tables = Inf)
+
+```
+
+Matching results can also be very easily visualized with the `plotSpectraMirror`
+function. Below we show the results for the first peak (Caffeine). The upper
+spectrum represents the query, the lower the target (reference) spectrum.
+
+```{r}
+plotSpectraMirror(spectra_match[1])
+```
+
+The results seem to be reasonable. For the second peak (third spectrum) the
+match was based however on a single peak.
+
+```{r}
+plotSpectraMirror(spectra_match[3])
+```
+
+Note that we could now also add some of the (cleaned and annotated) $MS^2$
+spectra from the present test set, to the `IonDb` using the `insertSpectra`
+function. This enables generation of lab-internal reference databases including
+also MS/MS spectra.
+
+# Package repositories and additional tutorials
+
+- Tutorial with additional examples and explanations for $MS^2$-based
+  annotations: https://jorainer.github.io/SpectraTutorials/
+- Repository of the `MsCoreUtils` package:
+  https://rformassspectrometry.github.io/MsCoreUtils/
+- Repository of the `MetaboCoreUtils` package:
+  https://rformassspectrometry.github.io/MetaboCoreUtils/
+- Repository of the `Spectra` package:
+  https://rformassspectrometry.github.io/Spectra/
+- Repository of the `MetaboAnnotation` package:
+  https://rformassspectrometry.github.io/MetaboAnnotation/
+- Repository of the `CompoundDb` package:
+  https://rformassspectrometry.github.io/CompoundDb/
+
+
+# Session information {-}
+
+The R version and versions of used packages are listed below.
+
+```{r}
+sessionInfo()
+```
+
+# References

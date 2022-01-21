@@ -1,0 +1,52 @@
+Package: MetaboAnnotationTutorials
+Title: Metabolomics Data Annotation Using MetaboAnnotation
+Version: 0.0.1
+Authors@R: c(
+	     person(given = "Johannes", family = "Rainer",
+		    email = "Johannes.Rainer@eurac.edu",
+		    role = c("aut", "cre"),
+		    comment = c(ORCID = "0000-0002-6977-7147")),
+         person(given = "Michael", family = "Witting",
+		    email = "michael.witting@helmholtz-muenchen.de",
+		    role = c("aut"),
+		    comment = c(ORCID = "0000-0002-1462-4426")),
+         person(given = "Laurent", family = "Gatto",
+		    email = "laurent.gatto@uclouvain.be",
+		    role = c("aut"),
+		    comment = c(ORCID = "0000-0002-1520-2268")),
+	     person(given = "Sebastian", family = "Gibb",
+		    email = "mail@sebastiangibb.de",
+		    role = c("aut"),
+		    comment = c(ORCID = "0000-0001-7406-4443")))
+Description: This resource contains examples and tutorials for metabolomics
+             data annotation using the `MetaboAnnotation`, `MetaboCoreUtils`
+             and `CompoundDb` R packages. In addition, functionality from
+             a variety of other R packages, such as `Spectra` and
+             `MsCoreUtils` are used in the various examples.
+License: Artistic-2.0
+Encoding: UTF-8
+LazyData: false
+Roxygen: list(markdown = TRUE)
+Depends:
+    R (>= 4.1)
+Suggests:
+    Spectra,
+    Biobase,
+    BiocStyle,
+    knitr,
+    rmarkdown,
+    pkgdown,
+    mzR,
+    MsBackendMgf,
+    CompoundDb,
+    pander,
+    xcms,
+    msdata,
+    MetaboAnnotation
+Remotes:
+    RforMassSpectrometry/CompoundDb,
+    RforMassSpectrometry/MetaboAnnotation
+URL: https://jorainer.github.io/MetaboAnnotationTutorials/
+BugReports: https://github.com/jorainer/MetaboAnnotationTutorials/issues/new
+VignetteBuilder: knitr
+RoxygenNote: 7.1.2
