@@ -113,8 +113,16 @@ more information).
 ```{r}
 library(CompoundDb)
 
-fl <- system.file("sqlite", "CompDb.Hsapiens.HMDB.5.0.sqlite",
-                  package = "MetaboAnnotationTutorials")
+library(piggyback)
+
+#' Download the SQLite database from github.
+pb_download("CompDb.Hsapiens.HMDB.5.0.sqlite",
+            repo = "jorainer/MetaboAnnotationTutorials",
+            tag = "2021-11-02",
+            dest = tempdir())
+
+fl <- file.path(tempdir(), "CompDb.Hsapiens.HMDB.5.0.sqlite")
+
 #' Load a CompDb database with compound annotation from HMDB
 cdb <- CompDb(fl)
 cdb

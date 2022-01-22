@@ -40,6 +40,7 @@ Suggests:
     rmarkdown,
     pkgdown,
     mzR,
+    piggyback,
     MsBackendMgf,
     pander,
     msdata
