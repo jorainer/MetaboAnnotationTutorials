@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding[utf8]{inputenc}
   %\VignettePackage{MetaboAnnotationTutorials}
-  %\VignetteDepends{xcms,Spectra,CompoundDb,pander,BiocStyle,MetaboAnnotation}
+  %\VignetteDepends{xcms,Spectra,CompoundDb,pander,BiocStyle,MetaboAnnotation,MetaboCoreUtils}
 bibliography: references.bib
 ---
 
@@ -110,11 +110,18 @@ resources can be created with the `r Biocpkg("CompoundDb")` package (see the
 [package documentation](https://RforMassSpectrometry.github.io/CompoundDb) for
 more information).
 
+```{r, eval = FALSE, echo = FALSE}
+#' Download the CompDb database using curl
+library(curl)
+dbname <- "CompDb.Hsapiens.HMDB.5.0.sqlite"
+curl_download(
+    paste0("https://github.com/jorainer/MetaboAnnotationTutorials/",
+           "releases/download/2021-11-02/", dbname),
+    destfile = file.path(tempdir(), dbname)
+```
+
 ```{r}
-library(CompoundDb)
-
 library(piggyback)
-
 #' Download the SQLite database from github.
 pb_download("CompDb.Hsapiens.HMDB.5.0.sqlite",
             repo = "jorainer/MetaboAnnotationTutorials",
@@ -123,6 +130,7 @@ pb_download("CompDb.Hsapiens.HMDB.5.0.sqlite",
 
 fl <- file.path(tempdir(), "CompDb.Hsapiens.HMDB.5.0.sqlite")
 
+library(CompoundDb)
 #' Load a CompDb database with compound annotation from HMDB
 cdb <- CompDb(fl)
 cdb
