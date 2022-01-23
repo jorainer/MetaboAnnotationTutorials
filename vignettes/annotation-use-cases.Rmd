@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding[utf8]{inputenc}
   %\VignettePackage{MetaboAnnotationTutorials}
-  %\VignetteDepends{xcms,Spectra,CompoundDb,pander,BiocStyle,MetaboAnnotation,MetaboCoreUtils,knitr,piggyback}
+  %\VignetteDepends{xcms,Spectra,CompoundDb,pander,BiocStyle,MetaboAnnotation,MetaboCoreUtils,knitr,curl}
 bibliography: references.bib
 ---
 
@@ -105,34 +105,44 @@ head(chromPeaks(std_data))
 We next annotate these chromatographic peaks using only their *m/z* values. As a
 reference we load a `CompDb` database containing all compounds from the Human
 Metabolom Database [@wishartHMDBHumanMetabolome2018] version 5.0 which is also
-provided within the `MetaboAnnotationTutorials` package. Such annotation
-resources can be created with the `r Biocpkg("CompoundDb")` package (see the
-[package documentation](https://RforMassSpectrometry.github.io/CompoundDb) for
-more information).
+provided as a data release on the `MetaboAnnotationTutorials` [github
+repository](https://github.com/jorainer/MetaboAnnotationTutorials). The database
+was build from HMDB 5.0 (2021-11-02) using the `r Biocpkg("CompoundDb")` package
+(see the [package
+documentation](https://RforMassSpectrometry.github.io/CompoundDb) for more
+information).
 
-```{r, eval = FALSE, echo = FALSE}
+Below we download the database from github to a temporary folder.
+
+```{r, eval = TRUE, echo = TRUE}
 #' Download the CompDb database using curl
 library(curl)
 dbname <- "CompDb.Hsapiens.HMDB.5.0.sqlite"
+db_file <- file.path(tempdir(), dbname)
 curl_download(
     paste0("https://github.com/jorainer/MetaboAnnotationTutorials/",
            "releases/download/2021-11-02/", dbname),
-    destfile = file.path(tempdir(), dbname)
+    destfile = db_file)
 ```
 
-```{r}
+```{r, eval = FALSE, echo = FALSE}
 library(piggyback)
 #' Download the SQLite database from github.
-pb_download("CompDb.Hsapiens.HMDB.5.0.sqlite",
+dbname <- "CompDb.Hsapiens.HMDB.5.0.sqlite"
+pb_download(dbname,
             repo = "jorainer/MetaboAnnotationTutorials",
             tag = "2021-11-02",
             dest = tempdir())
+db_file <- file.path(tempdir(), dbname)
 
-fl <- file.path(tempdir(), "CompDb.Hsapiens.HMDB.5.0.sqlite")
+```
 
+We next load the database using the `CompoundDb` package.
+
+```{r}
 library(CompoundDb)
 #' Load a CompDb database with compound annotation from HMDB
-cdb <- CompDb(fl)
+cdb <- CompDb(db_file)
 cdb
 ```
 

@@ -31,16 +31,16 @@ Depends:
     R (>= 4.1),
     MetaboAnnotation,
     Spectra,
-    CompoundDb,
-    xcms
+    CompoundDb
 Suggests:
+    xcms,
     Biobase,
     BiocStyle,
     knitr,
     rmarkdown,
     pkgdown,
     mzR,
-    piggyback,
+    curl,
     MsBackendMgf,
     MetaboCoreUtils,
     pander,
