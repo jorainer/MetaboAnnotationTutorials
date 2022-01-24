@@ -38,13 +38,11 @@ Suggests:
     BiocStyle,
     knitr,
     rmarkdown,
-    pkgdown,
     mzR,
     curl,
     MsBackendMgf,
     MetaboCoreUtils,
-    pander,
-    msdata
+    pander
 Remotes:
     RforMassSpectrometry/CompoundDb,
     RforMassSpectrometry/MetaboAnnotation
