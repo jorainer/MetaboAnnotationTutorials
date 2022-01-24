@@ -26,33 +26,31 @@ metabolomics and small compound datasets using functionality from the
 `r Biocpkg("MetaboAnnotation")`, `r Biocpkg("MetaboCoreUtils")` and
 `r Biocpkg("CompoundDb")` packages. All data used in this document is available
 within the [github
-repository](https://github.com/jorainer/annotation_ecosystem)
-https://github.com/jorainer/annotation_ecosystem. Additional use cases and
+repository](https://github.com/jorainer/MetaboAnnotationTutorials)
+https://github.com/jorainer/MetaboAnnotationTutorials. Additional use cases and
 examples can be found in the packages' vignettes and workshops/tutorials. See
 section *Package repositories and additional tutorials* for links to the package
 repositories and tutorials.
 
 # Installation instructions
 
-The R packages used in this document can be installed with the R code below:
+The R packages as well as the example files used in this document can be
+installed with the R code below:
 
 ```{r, eval = FALSE}
 install.packages("BiocManager")
-BiocManager::install(c("xcms", "pander"))
-BiocManager::install(c("Spectra", "MsCoreUtils", "MetaboCoreUtils"))
-BiocManager::install("RforMassSpectrometry/CompoundDb")
-BiocManager::install("RforMassSpectrometry/MetaboAnnotation")
+BiocManager::install("jorainer/MetaboAnnotationTutorials")
 ```
 
 The source code for this document along with the test data can be downloaded
-from the github repository https://github.com/jorainer/annotation_ecosystem with
-the command (or alternatively downloading the zip archive directly from the
-github page; note that [git-lfs](https://git-lfs.github.com/) needs to be
-installed for the command below to work).
+from the github repository https://github.com/jorainer/MetaboAnnotationTutorials
+with the command (or alternatively downloading the zip archive directly from the
+github page).
 
 ```
-git clone https://github.com/jorainer/annotation_ecosystem
+git clone https://github.com/jorainer/MetaboAnnotationTutorials
 ```
+
 
 # $MS^1$ annotation
 
@@ -154,7 +152,7 @@ same approach by simply exchanging the `chromPeaks` call with
 generated from an `xcms` result object using the `quantify` method.
 
 
-## Annotation using *m/z* values
+## Annotation using *m/z* values {#ms1mz}
 
 We next extract all peaks from the `xcms` result object and annotate them using
 the `matchMz` function against all compounds from HMDB (the compound annotations
@@ -485,7 +483,7 @@ pandoc.table(head(as.data.frame(
 ```
 
 
-# $MS^2$ annotation
+# $MS^2$ annotation {#ms2}
 
 In addition to $MS^1$ annotation described in the previous section, it is also
 possible to annotate features (or chromatographic peaks) by comparing
@@ -614,6 +612,95 @@ Note that we could now also add some of the (cleaned and annotated) $MS^2$
 spectra from the present test set, to the `IonDb` using the `insertSpectra`
 function. This enables generation of lab-internal reference databases including
 also MS/MS spectra.
+
+# Working with data from other tools
+
+$MS^1$-based annotations can be performed on any `data.frame` or similar that
+provides $m/z$ and/or retention time values. For $MS^2$-based annotations a
+`Spectra` object would be needed, and that can be imported from a variety of
+formats. In this section we show how pre-processing results from an external
+tool (in this case [MZmine](https://mzmine.github.io/)) can be imported and used
+as input for `MetaboAnnotation`.
+
+The test data we are using is one of the example data sets for GNPS
+Feature-Based Molecular Networking [@nothias_feature-based_2020]. A description
+on how this data was generated is provided in the [GNPS Feature-Based Molecular
+Networking
+documentation](https://ccms-ucsd.github.io/GNPSDocumentation/featurebasedmolecularnetworking-with-mzmine2/). The
+data set consists of feature abundances (along with retention time and m/z
+values) and $MS^2$ spectra for these features. These example files are
+distributed through the github repository of the GNPS documentation
+[https://github.com/CCMS-UCSD/GNPSDocumentation.git](https://github.com/CCMS-UCSD/GNPSDocumentation.git).
+
+Below we first download the feature table (in csv format) from the above
+mentioned repository to a temporary file.
+
+```{r}
+f_file <- "MZmine-GNPS_AG_test_featuretable.csv"
+url <- paste0("https://raw.githubusercontent.com/CCMS-UCSD/GNPSDocumentation",
+              "/master/docs/tutorials/AG_tutorial_files/")
+curl_download(paste0(url, f_file),
+              destfile = file.path(tempdir(), f_file))
+```
+
+We next load this file into R using the base `read.csv` function.
+
+```{r}
+ftable <- read.csv(file.path(tempdir(), f_file), check.names = FALSE)
+```
+
+We can now use this file as an input for $MS^1$-based annotation, as shown in
+section [Annotation using *m/z* values](#ms1mz) above, and match the m/z values
+of the features against HMDB assuming `[M+H]+` and `[M+Na]+` adducts. With
+parameter `mzColname` we define the column in the input file containing the m/z
+values. For MZmine this is column `"row m/z"`.
+
+```{r}
+param <- Mass2MzParam(adducts = c("[M+H]+", "[M+Na]+"), ppm = 10)
+
+f_match <- matchMz(
+    ftable,
+    compounds(cdb, c("compound_id", "exactmass", "formula", "name")),
+    param = param,
+    mzColname = "row m/z")
+f_match
+```
+
+For `r length(whichQuery(f_match))` of the in total `r nrow(ftable)` features a
+compound matching the feature's m/z was found.
+
+$MS^2$ spectra can be exported from MZmine in mgf file format. Below we download
+the MGF file with all $MS^2$ spectra for the features from the example above to
+a temporary folder.
+
+```{r}
+s_file <- "MZmine-GNPS_AG_test_GNPS.mgf"
+curl_download(paste0(url, s_file),
+              destfile = file.path(tempdir(), s_file))
+```
+
+Files in MGF format can be imported with the `r Biocpkg("MsBackendMgf")`
+package. Below we use this package to create a `Spectra` object with all spectra
+from the example file.
+
+```{r}
+library(MsBackendMgf)
+sps_mgf <- Spectra(file.path(tempdir(), s_file),
+                   source = MsBackendMgf())
+```
+
+By default all data fields from the original MGF file are imported. Thus, the
+`Spectra` object contains also a variable called `FEATURE_ID` with the
+identifiers for the features the spectra are associated with.
+
+```{r}
+head(sps_mgf$FEATURE_ID)
+```
+
+This `Spectra` object could then simply be used as in input parameter to the
+`matchSpectra` function as shown in the [$MS^2$ annotation section](#ms2) above
+to e.g. identify matches with reference spectra from HMDB.
+
 
 # Package repositories and additional tutorials
 
