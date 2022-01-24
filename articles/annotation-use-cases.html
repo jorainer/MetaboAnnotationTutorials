@@ -88,19 +88,16 @@ and Michael Witting</h4>
 
     
     
-<p>This documents provides use cases describing the annotation of untarget metabolomics and small compound datasets using functionality from the <em><a href="https://bioconductor.org/packages/3.14/MetaboAnnotation" class="external-link">MetaboAnnotation</a></em>, <em><a href="https://bioconductor.org/packages/3.14/MetaboCoreUtils" class="external-link">MetaboCoreUtils</a></em> and <em><a href="https://bioconductor.org/packages/3.14/CompoundDb" class="external-link">CompoundDb</a></em> packages. All data used in this document is available within the <a href="https://github.com/jorainer/annotation_ecosystem" class="external-link">github repository</a> <a href="https://github.com/jorainer/annotation_ecosystem" class="external-link uri">https://github.com/jorainer/annotation_ecosystem</a>. Additional use cases and examples can be found in the packages’ vignettes and workshops/tutorials. See section <em>Package repositories and additional tutorials</em> for links to the package repositories and tutorials.</p>
+<p>This documents provides use cases describing the annotation of untarget metabolomics and small compound datasets using functionality from the <em><a href="https://bioconductor.org/packages/3.14/MetaboAnnotation" class="external-link">MetaboAnnotation</a></em>, <em><a href="https://bioconductor.org/packages/3.14/MetaboCoreUtils" class="external-link">MetaboCoreUtils</a></em> and <em><a href="https://bioconductor.org/packages/3.14/CompoundDb" class="external-link">CompoundDb</a></em> packages. All data used in this document is available within the <a href="https://github.com/jorainer/MetaboAnnotationTutorials" class="external-link">github repository</a> <a href="https://github.com/jorainer/MetaboAnnotationTutorials" class="external-link uri">https://github.com/jorainer/MetaboAnnotationTutorials</a>. Additional use cases and examples can be found in the packages’ vignettes and workshops/tutorials. See section <em>Package repositories and additional tutorials</em> for links to the package repositories and tutorials.</p>
 <div class="section level2">
 <h2 id="installation-instructions">Installation instructions<a class="anchor" aria-label="anchor" href="#installation-instructions"></a>
 </h2>
-<p>The R packages used in this document can be installed with the R code below:</p>
+<p>The R packages as well as the example files used in this document can be installed with the R code below:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"xcms"</span>, <span class="st">"pander"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Spectra"</span>, <span class="st">"MsCoreUtils"</span>, <span class="st">"MetaboCoreUtils"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"RforMassSpectrometry/CompoundDb"</span><span class="op">)</span>
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"RforMassSpectrometry/MetaboAnnotation"</span><span class="op">)</span></code></pre></div>
-<p>The source code for this document along with the test data can be downloaded from the github repository <a href="https://github.com/jorainer/annotation_ecosystem" class="external-link uri">https://github.com/jorainer/annotation_ecosystem</a> with the command (or alternatively downloading the zip archive directly from the github page; note that <a href="https://git-lfs.github.com/" class="external-link">git-lfs</a> needs to be installed for the command below to work).</p>
-<pre><code>git clone https://github.com/jorainer/annotation_ecosystem</code></pre>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"jorainer/MetaboAnnotationTutorials"</span><span class="op">)</span></code></pre></div>
+<p>The source code for this document along with the test data can be downloaded from the github repository <a href="https://github.com/jorainer/MetaboAnnotationTutorials" class="external-link uri">https://github.com/jorainer/MetaboAnnotationTutorials</a> with the command (or alternatively downloading the zip archive directly from the github page).</p>
+<pre><code>git clone https://github.com/jorainer/MetaboAnnotationTutorials</code></pre>
 </div>
 <div class="section level2">
 <h2 id="ms1-annotation">
@@ -166,7 +163,7 @@ and Michael Witting</h4>
 <span class="co">##  MS/MS spectra count: 64920</span></code></pre>
 <p><strong>Note</strong>: while we are here annotating chromatographic peaks from an <code>xcms</code> result object, it would also be possible to annotate LC-MS features using the same approach by simply exchanging the <code>chromPeaks</code> call with <code>featureDefinitions</code>. In addition, the annotation could also be performed on a <code>SummarizedExperiment</code> representing the preprocessing results which can be generated from an <code>xcms</code> result object using the <code>quantify</code> method.</p>
 <div class="section level3">
-<h3 id="annotation-using-mz-values">Annotation using <em>m/z</em> values<a class="anchor" aria-label="anchor" href="#annotation-using-mz-values"></a>
+<h3 id="ms1mz">Annotation using <em>m/z</em> values<a class="anchor" aria-label="anchor" href="#ms1mz"></a>
 </h3>
 <p>We next extract all peaks from the <code>xcms</code> result object and annotate them using the <code>matchMz</code> function against all compounds from HMDB (the compound annotations can be extracted from the <code>CompDb</code> database with the <code>compounds</code> function). The reference database does not provide <em>m/z</em> values but only exact masses for each compound. Thus, in order to annotate our chromatographic peaks’ <em>m/z</em> values, <em>m/z</em> values for expected ions of the compounds need to be calculated first. With <code>Mass2MzParam</code> we can configure the parameters for the annotation. Parameter <code>adducts</code> allows to specify the adducts (ions) we expect to see mostly in the data set. For our example we assume to see mostly <code>[M+H]+</code> and <code>[M+Na]+</code> positive ions. With parameters <code>tolerance</code> and <code>ppm</code> we can finally define also the absolute and/or <em>m/z</em> relative acceptable difference, respectively, for <em>m/z</em> values to be considered matching.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -644,8 +641,8 @@ and Michael Witting</h4>
 </div>
 </div>
 <div class="section level2">
-<h2 id="ms2-annotation">
-<span class="math inline">\(MS^2\)</span> annotation<a class="anchor" aria-label="anchor" href="#ms2-annotation"></a>
+<h2 id="ms2">
+<span class="math inline">\(MS^2\)</span> annotation<a class="anchor" aria-label="anchor" href="#ms2"></a>
 </h2>
 <p>In addition to <span class="math inline">\(MS^1\)</span> annotation described in the previous section, it is also possible to annotate features (or chromatographic peaks) by comparing experimentally measured <span class="math inline">\(MS^2\)</span> (MS/MS) spectra against reference spectra. Such annotation can be performed using the <code>matchSpectra</code> from the <code>MetaboAnnotation</code> package that takes <code>Spectra</code> objects (with <span class="math inline">\(MS^2\)</span> spectra) as query and target parameters. Such <code>Spectra</code> objects can be either imported from a variety of input formats, including MGF, MSP, mzML, mzXML or netCDF files, extracted from <code>xcms</code> result objects or even retrieved from databases such as <em>MassBank</em> (see also the tutorials from <a href="https://jorainer.github.io/SpectraTutorials/" class="external-link">SpectraTutorials</a> for more examples and use cases).</p>
 <p>To illustrate this, we will extract in this section <span class="math inline">\(MS^2\)</span> spectra for the annotated chromatographic peaks from the previous section and compare them against reference <span class="math inline">\(MS^2\)</span> spectra from HMDB. Annotation reliability can be increased if, in addition to <em>m/z</em> and retention time, also the <span class="math inline">\(MS^2\)</span> spectra for a chromatographic peak or a feature matches the reference spectrum from a pure standard.</p>
@@ -707,7 +704,7 @@ and Michael Witting</h4>
 <span class="co">## HighIS_Mix07_CE20_POS.mzML</span>
 <span class="co">## Lazy evaluation queue: 1 processing step(s)</span>
 <span class="co">## Processing:</span>
-<span class="co">##  Remove peaks based on their intensities and a user-provided function in spectra of MS level(s) 2. [Sun Jan 23 16:47:51 2022]</span></code></pre>
+<span class="co">##  Remove peaks based on their intensities and a user-provided function in spectra of MS level(s) 2. [Mon Jan 24 14:33:53 2022]</span></code></pre>
 <p>In addition, we scale the peak intensities within each spectrum to values between 0 and 100. This is mostly for visualization reason, since most spectra similarity scoring algorithms are independent of absolute peak intensities.</p>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#' Define a function to *scale* the intensities</span>
@@ -948,6 +945,52 @@ and Michael Witting</h4>
 <p>Note that we could now also add some of the (cleaned and annotated) <span class="math inline">\(MS^2\)</span> spectra from the present test set, to the <code>IonDb</code> using the <code>insertSpectra</code> function. This enables generation of lab-internal reference databases including also MS/MS spectra.</p>
 </div>
 <div class="section level2">
+<h2 id="working-with-data-from-other-tools">Working with data from other tools<a class="anchor" aria-label="anchor" href="#working-with-data-from-other-tools"></a>
+</h2>
+<p><span class="math inline">\(MS^1\)</span>-based annotations can be performed on any <code>data.frame</code> or similar that provides <span class="math inline">\(m/z\)</span> and/or retention time values. For <span class="math inline">\(MS^2\)</span>-based annotations a <code>Spectra</code> object would be needed, and that can be imported from a variety of formats. In this section we show how pre-processing results from an external tool (in this case <a href="https://mzmine.github.io/" class="external-link">MZmine</a>) can be imported and used as input for <code>MetaboAnnotation</code>.</p>
+<p>The test data we are using is one of the example data sets for GNPS Feature-Based Molecular Networking <span class="citation">(Nothias et al. 2020)</span>. A description on how this data was generated is provided in the <a href="https://ccms-ucsd.github.io/GNPSDocumentation/featurebasedmolecularnetworking-with-mzmine2/" class="external-link">GNPS Feature-Based Molecular Networking documentation</a>. The data set consists of feature abundances (along with retention time and m/z values) and <span class="math inline">\(MS^2\)</span> spectra for these features. These example files are distributed through the github repository of the GNPS documentation <a href="https://github.com/CCMS-UCSD/GNPSDocumentation.git" class="external-link">https://github.com/CCMS-UCSD/GNPSDocumentation.git</a>.</p>
+<p>Below we first download the feature table (in csv format) from the above mentioned repository to a temporary file.</p>
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">f_file</span> <span class="op">&lt;-</span> <span class="st">"MZmine-GNPS_AG_test_featuretable.csv"</span>
+<span class="va">url</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/CCMS-UCSD/GNPSDocumentation"</span>,
+              <span class="st">"/master/docs/tutorials/AG_tutorial_files/"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/curl/man/curl_download.html" class="external-link">curl_download</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">url</span>, <span class="va">f_file</span><span class="op">)</span>,
+              destfile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">f_file</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>We next load this file into R using the base <code>read.csv</code> function.</p>
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ftable</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">f_file</span><span class="op">)</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<p>We can now use this file as an input for <span class="math inline">\(MS^1\)</span>-based annotation, as shown in section <a href="#ms1mz">Annotation using <em>m/z</em> values</a> above, and match the m/z values of the features against HMDB assuming <code>[M+H]+</code> and <code>[M+Na]+</code> adducts. With parameter <code>mzColname</code> we define the column in the input file containing the m/z values. For MZmine this is column <code>"row m/z"</code>.</p>
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MetaboAnnotation/man/matchMz.html" class="external-link">Mass2MzParam</a></span><span class="op">(</span>adducts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"[M+H]+"</span>, <span class="st">"[M+Na]+"</span><span class="op">)</span>, ppm <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
+
+<span class="va">f_match</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MetaboAnnotation/man/matchMz.html" class="external-link">matchMz</a></span><span class="op">(</span>
+    <span class="va">ftable</span>,
+    <span class="fu">compounds</span><span class="op">(</span><span class="va">cdb</span>, <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"compound_id"</span>, <span class="st">"exactmass"</span>, <span class="st">"formula"</span>, <span class="st">"name"</span><span class="op">)</span><span class="op">)</span>,
+    param <span class="op">=</span> <span class="va">param</span>,
+    mzColname <span class="op">=</span> <span class="st">"row m/z"</span><span class="op">)</span>
+<span class="va">f_match</span></code></pre></div>
+<pre><code><span class="co">## Object of class Matched </span>
+<span class="co">## Total number of matches: 31333 </span>
+<span class="co">## Number of query objects: 3443 (2251 matched)</span>
+<span class="co">## Number of target objects: 217776 (13194 matched)</span></code></pre>
+<p>For 2251 of the in total 3443 features a compound matching the feature’s m/z was found.</p>
+<p><span class="math inline">\(MS^2\)</span> spectra can be exported from MZmine in mgf file format. Below we download the MGF file with all <span class="math inline">\(MS^2\)</span> spectra for the features from the example above to a temporary folder.</p>
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">s_file</span> <span class="op">&lt;-</span> <span class="st">"MZmine-GNPS_AG_test_GNPS.mgf"</span>
+<span class="fu"><a href="https://rdrr.io/pkg/curl/man/curl_download.html" class="external-link">curl_download</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">url</span>, <span class="va">s_file</span><span class="op">)</span>,
+              destfile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">s_file</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>Files in MGF format can be imported with the <em><a href="https://bioconductor.org/packages/3.14/MsBackendMgf" class="external-link">MsBackendMgf</a></em> package. Below we use this package to create a <code>Spectra</code> object with all spectra from the example file.</p>
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RforMassSpectrometry/MsBackendMgf" class="external-link">MsBackendMgf</a></span><span class="op">)</span>
+<span class="va">sps_mgf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Spectra/man/Spectra.html" class="external-link">Spectra</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">s_file</span><span class="op">)</span>,
+                   source <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/MsBackendMgf/man/MsBackendMgf.html" class="external-link">MsBackendMgf</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>By default all data fields from the original MGF file are imported. Thus, the <code>Spectra</code> object contains also a variable called <code>FEATURE_ID</code> with the identifiers for the features the spectra are associated with.</p>
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sps_mgf</span><span class="op">$</span><span class="va">FEATURE_ID</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] "1" "2" "3" "4" "6" "7"</span></code></pre>
+<p>This <code>Spectra</code> object could then simply be used as in input parameter to the <code>matchSpectra</code> function as shown in the <a href="#ms2"><span class="math inline">\(MS^2\)</span> annotation section</a> above to e.g. identify matches with reference spectra from HMDB.</p>
+</div>
+<div class="section level2">
 <h2 id="package-repositories-and-additional-tutorials">Package repositories and additional tutorials<a class="anchor" aria-label="anchor" href="#package-repositories-and-additional-tutorials"></a>
 </h2>
 <ul>
@@ -969,7 +1012,7 @@ and Michael Witting</h4>
 <h2 class="unnumbered" id="session-information">Session information<a class="anchor" aria-label="anchor" href="#session-information"></a>
 </h2>
 <p>The R version and versions of used packages are listed below.</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## R version 4.1.2 (2021-11-01)</span>
 <span class="co">## Platform: x86_64-pc-linux-gnu (64-bit)</span>
@@ -991,12 +1034,13 @@ and Michael Witting</h4>
 <span class="co">## [8] base     </span>
 <span class="co">## </span>
 <span class="co">## other attached packages:</span>
-<span class="co">##  [1] MetaboCoreUtils_1.2.0   pander_0.6.4            MetaboAnnotation_0.99.2</span>
-<span class="co">##  [4] CompoundDb_0.99.4       AnnotationFilter_1.18.0 curl_4.3.2             </span>
-<span class="co">##  [7] xcms_3.16.1             MSnbase_2.20.4          ProtGenerics_1.26.0    </span>
-<span class="co">## [10] S4Vectors_0.32.3        mzR_2.28.0              Rcpp_1.0.8             </span>
-<span class="co">## [13] Biobase_2.54.0          BiocGenerics_0.40.0     BiocParallel_1.28.3    </span>
-<span class="co">## [16] knitr_1.37              BiocStyle_2.22.0       </span>
+<span class="co">##  [1] MsBackendMgf_1.2.0      Spectra_1.4.1           MetaboCoreUtils_1.2.0  </span>
+<span class="co">##  [4] pander_0.6.4            MetaboAnnotation_0.99.2 CompoundDb_0.99.4      </span>
+<span class="co">##  [7] AnnotationFilter_1.18.0 curl_4.3.2              xcms_3.16.1            </span>
+<span class="co">## [10] MSnbase_2.20.4          ProtGenerics_1.26.0     S4Vectors_0.32.3       </span>
+<span class="co">## [13] mzR_2.28.0              Rcpp_1.0.8              Biobase_2.54.0         </span>
+<span class="co">## [16] BiocGenerics_0.40.0     BiocParallel_1.28.3     knitr_1.37             </span>
+<span class="co">## [19] BiocStyle_2.22.0       </span>
 <span class="co">## </span>
 <span class="co">## loaded via a namespace (and not attached):</span>
 <span class="co">##   [1] colorspace_2.0-2            rjson_0.2.21               </span>
@@ -1009,55 +1053,58 @@ and Michael Witting</h4>
 <span class="co">##  [15] codetools_0.2-18            ncdf4_1.19                 </span>
 <span class="co">##  [17] doParallel_1.0.16           cachem_1.0.6               </span>
 <span class="co">##  [19] impute_1.68.0               robustbase_0.93-9          </span>
-<span class="co">##  [21] jsonlite_1.7.3              Spectra_1.4.1              </span>
-<span class="co">##  [23] dbplyr_2.1.1                cluster_2.1.2              </span>
-<span class="co">##  [25] vsn_3.62.0                  png_0.1-7                  </span>
-<span class="co">##  [27] BiocManager_1.30.16         compiler_4.1.2             </span>
-<span class="co">##  [29] assertthat_0.2.1            Matrix_1.4-0               </span>
-<span class="co">##  [31] fastmap_1.1.0               lazyeval_0.2.2             </span>
-<span class="co">##  [33] limma_3.50.0                htmltools_0.5.2            </span>
-<span class="co">##  [35] tools_4.1.2                 gtable_0.3.0               </span>
-<span class="co">##  [37] glue_1.6.0                  GenomeInfoDbData_1.2.7     </span>
-<span class="co">##  [39] affy_1.72.0                 RANN_2.6.1                 </span>
-<span class="co">##  [41] dplyr_1.0.7                 rsvg_2.1.2                 </span>
-<span class="co">##  [43] MALDIquant_1.21             jquerylib_0.1.4            </span>
-<span class="co">##  [45] pkgdown_2.0.2.9000          vctrs_0.3.8                </span>
-<span class="co">##  [47] preprocessCore_1.56.0       iterators_1.0.13           </span>
-<span class="co">##  [49] xfun_0.29                   stringr_1.4.0              </span>
-<span class="co">##  [51] lifecycle_1.0.1             XML_3.99-0.8               </span>
-<span class="co">##  [53] DEoptimR_1.0-10             zlibbioc_1.40.0            </span>
-<span class="co">##  [55] MASS_7.3-55                 scales_1.1.1               </span>
-<span class="co">##  [57] ragg_1.2.1                  pcaMethods_1.86.0          </span>
-<span class="co">##  [59] MatrixGenerics_1.6.0        parallel_4.1.2             </span>
-<span class="co">##  [61] SummarizedExperiment_1.24.0 MassSpecWavelet_1.60.0     </span>
-<span class="co">##  [63] RColorBrewer_1.1-2          yaml_2.2.1                 </span>
-<span class="co">##  [65] memoise_2.0.1               gridExtra_2.3              </span>
-<span class="co">##  [67] ggplot2_3.3.5               MsFeatures_1.2.0           </span>
-<span class="co">##  [69] sass_0.4.0                  stringi_1.7.6              </span>
-<span class="co">##  [71] RSQLite_2.2.9               highr_0.9                  </span>
-<span class="co">##  [73] desc_1.4.0                  foreach_1.5.1              </span>
-<span class="co">##  [75] GenomeInfoDb_1.30.0         rlang_0.4.12               </span>
-<span class="co">##  [77] pkgconfig_2.0.3             systemfonts_1.0.3          </span>
-<span class="co">##  [79] matrixStats_0.61.0          bitops_1.0-7               </span>
-<span class="co">##  [81] mzID_1.32.0                 evaluate_0.14              </span>
-<span class="co">##  [83] lattice_0.20-45             purrr_0.3.4                </span>
-<span class="co">##  [85] ChemmineR_3.46.0            htmlwidgets_1.5.4          </span>
-<span class="co">##  [87] bit_4.0.4                   tidyselect_1.1.1           </span>
-<span class="co">##  [89] plyr_1.8.6                  magrittr_2.0.1             </span>
-<span class="co">##  [91] R6_2.5.1                    IRanges_2.28.0             </span>
-<span class="co">##  [93] generics_0.1.1              DelayedArray_0.20.0        </span>
-<span class="co">##  [95] DBI_1.1.2                   pillar_1.6.4               </span>
-<span class="co">##  [97] MsCoreUtils_1.6.0           RCurl_1.98-1.5             </span>
-<span class="co">##  [99] tibble_3.1.6                crayon_1.4.2               </span>
-<span class="co">## [101] utf8_1.2.2                  rmarkdown_2.11             </span>
-<span class="co">## [103] grid_4.1.2                  blob_1.2.2                 </span>
-<span class="co">## [105] digest_0.6.29               textshaping_0.3.6          </span>
-<span class="co">## [107] munsell_0.5.0               bslib_0.3.1</span></code></pre>
+<span class="co">##  [21] jsonlite_1.7.3              dbplyr_2.1.1               </span>
+<span class="co">##  [23] cluster_2.1.2               vsn_3.62.0                 </span>
+<span class="co">##  [25] png_0.1-7                   BiocManager_1.30.16        </span>
+<span class="co">##  [27] compiler_4.1.2              assertthat_0.2.1           </span>
+<span class="co">##  [29] Matrix_1.4-0                fastmap_1.1.0              </span>
+<span class="co">##  [31] lazyeval_0.2.2              limma_3.50.0               </span>
+<span class="co">##  [33] htmltools_0.5.2             tools_4.1.2                </span>
+<span class="co">##  [35] gtable_0.3.0                glue_1.6.0                 </span>
+<span class="co">##  [37] GenomeInfoDbData_1.2.7      affy_1.72.0                </span>
+<span class="co">##  [39] RANN_2.6.1                  dplyr_1.0.7                </span>
+<span class="co">##  [41] rsvg_2.1.2                  MALDIquant_1.21            </span>
+<span class="co">##  [43] jquerylib_0.1.4             pkgdown_2.0.2.9000         </span>
+<span class="co">##  [45] vctrs_0.3.8                 preprocessCore_1.56.0      </span>
+<span class="co">##  [47] iterators_1.0.13            xfun_0.29                  </span>
+<span class="co">##  [49] stringr_1.4.0               lifecycle_1.0.1            </span>
+<span class="co">##  [51] XML_3.99-0.8                DEoptimR_1.0-10            </span>
+<span class="co">##  [53] zlibbioc_1.40.0             MASS_7.3-55                </span>
+<span class="co">##  [55] scales_1.1.1                ragg_1.2.1                 </span>
+<span class="co">##  [57] pcaMethods_1.86.0           MatrixGenerics_1.6.0       </span>
+<span class="co">##  [59] parallel_4.1.2              SummarizedExperiment_1.24.0</span>
+<span class="co">##  [61] MassSpecWavelet_1.60.0      RColorBrewer_1.1-2         </span>
+<span class="co">##  [63] yaml_2.2.1                  memoise_2.0.1              </span>
+<span class="co">##  [65] gridExtra_2.3               ggplot2_3.3.5              </span>
+<span class="co">##  [67] MsFeatures_1.2.0            sass_0.4.0                 </span>
+<span class="co">##  [69] stringi_1.7.6               RSQLite_2.2.9              </span>
+<span class="co">##  [71] highr_0.9                   desc_1.4.0                 </span>
+<span class="co">##  [73] foreach_1.5.1               GenomeInfoDb_1.30.0        </span>
+<span class="co">##  [75] rlang_0.4.12                pkgconfig_2.0.3            </span>
+<span class="co">##  [77] systemfonts_1.0.3           matrixStats_0.61.0         </span>
+<span class="co">##  [79] bitops_1.0-7                mzID_1.32.0                </span>
+<span class="co">##  [81] evaluate_0.14               lattice_0.20-45            </span>
+<span class="co">##  [83] purrr_0.3.4                 ChemmineR_3.46.0           </span>
+<span class="co">##  [85] htmlwidgets_1.5.4           bit_4.0.4                  </span>
+<span class="co">##  [87] tidyselect_1.1.1            plyr_1.8.6                 </span>
+<span class="co">##  [89] magrittr_2.0.1              R6_2.5.1                   </span>
+<span class="co">##  [91] IRanges_2.28.0              generics_0.1.1             </span>
+<span class="co">##  [93] DelayedArray_0.20.0         DBI_1.1.2                  </span>
+<span class="co">##  [95] pillar_1.6.4                MsCoreUtils_1.6.0          </span>
+<span class="co">##  [97] RCurl_1.98-1.5              tibble_3.1.6               </span>
+<span class="co">##  [99] crayon_1.4.2                utf8_1.2.2                 </span>
+<span class="co">## [101] rmarkdown_2.11              grid_4.1.2                 </span>
+<span class="co">## [103] blob_1.2.2                  digest_0.6.29              </span>
+<span class="co">## [105] textshaping_0.3.6           munsell_0.5.0              </span>
+<span class="co">## [107] bslib_0.3.1</span></code></pre>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-nothias_feature-based_2020" class="csl-entry">
+Nothias, Louis-Félix, Daniel Petras, Robin Schmid, Kai Dührkop, Johannes Rainer, Abinesh Sarvepalli, Ivan Protsyuk, et al. 2020. <span>“Feature-Based Molecular Networking in the <span>GNPS</span> Analysis Environment.”</span> <em>Nature Methods</em> 17 (9): 905–8. <a href="https://doi.org/10.1038/s41592-020-0933-6" class="external-link">https://doi.org/10.1038/s41592-020-0933-6</a>.
+</div>
 <div id="ref-stoffelNAlkylpyridiniumSulfonatesRetention2021" class="csl-entry">
 Stoffel, Rainer, Michael A. Quilliam, Normand Hardt, Anders Fridstrom, and Michael Witting. 2021. <span>“N-<span>Alkylpyridinium</span> Sulfonates for Retention Time Indexing in Reversed-Phase-Liquid Chromatography-Mass Spectrometry–Based Metabolomics.”</span> <em>Analytical and Bioanalytical Chemistry</em>, December. <a href="https://doi.org/10.1007/s00216-021-03828-0" class="external-link">https://doi.org/10.1007/s00216-021-03828-0</a>.
 </div>
