@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">MetaboAnnotationTutorials</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
       </span>
     </div>
 
@@ -57,6 +57,9 @@
       <a href="articles/annotation-use-cases.html">Use Cases for Metabolomics Data Annotation Using MetaboAnnotation</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -85,14 +88,10 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>The R packages used in this examples can be installed with the R code below:</p>
-<pre><code><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"xcms"</span>, <span class="st">"pander"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Spectra"</span>, <span class="st">"MsCoreUtils"</span>, <span class="st">"MetaboCoreUtils"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"RforMassSpectrometry/CompoundDb"</span><span class="op">)</span>
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"RforMassSpectrometry/MetaboAnnotation"</span><span class="op">)</span></code></pre>
-<p>The source code for this document along with the test data can be downloaded from the github repository <a href="https://github.com/jorainer/annotation_ecosystem" class="external-link uri">https://github.com/jorainer/annotation_ecosystem</a> with the command (or alternatively downloading the zip archive directly from the github page; note that <a href="https://git-lfs.github.com/" class="external-link">git-lfs</a> needs to be installed for the command below to work).</p>
-<pre><code>git clone https://github.com/jorainer/annotation_ecosystem</code></pre>
+<p>The R packages as well as the example files used in this document can be installed with the R code below:</p>
+<p><code>{r, eval = FALSE} install.packages("BiocManager") BiocManager::install("jorainer/MetaboAnnotationTutorials")</code></p>
+<p>The source code for this document along with the test data can be downloaded from the github repository <a href="https://github.com/jorainer/MetaboAnnotationTutorials" class="external-link uri">https://github.com/jorainer/MetaboAnnotationTutorials</a> with the command (or alternatively downloading the zip archive directly from the github page).</p>
+<pre><code>git clone https://github.com/jorainer/MetaboAnnotationTutorials</code></pre>
 </div>
 <div class="section level2">
 <h2 id="additional-documentation-resources-and-tutorials">Additional documentation resources and tutorials<a class="anchor" aria-label="anchor" href="#additional-documentation-resources-and-tutorials"></a>
