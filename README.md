@@ -6,25 +6,23 @@ metabolomics or small compound MS data using the `MetaboAnnotation` and
 
 ## Installation
 
-The R packages used in this examples can be installed with the R code below:
+The R packages as well as the example files used in this document can be
+installed with the R code below:
 
-```
+```{r, eval = FALSE}
 install.packages("BiocManager")
-BiocManager::install(c("xcms", "pander"))
-BiocManager::install(c("Spectra", "MsCoreUtils", "MetaboCoreUtils"))
-BiocManager::install("RforMassSpectrometry/CompoundDb")
-BiocManager::install("RforMassSpectrometry/MetaboAnnotation")
+BiocManager::install("jorainer/MetaboAnnotationTutorials")
 ```
 
 The source code for this document along with the test data can be downloaded
-from the github repository https://github.com/jorainer/annotation_ecosystem with
-the command (or alternatively downloading the zip archive directly from the
-github page; note that [git-lfs](https://git-lfs.github.com/) needs to be
-installed for the command below to work).
+from the github repository https://github.com/jorainer/MetaboAnnotationTutorials
+with the command (or alternatively downloading the zip archive directly from the
+github page).
 
 ```
-git clone https://github.com/jorainer/annotation_ecosystem
+git clone https://github.com/jorainer/MetaboAnnotationTutorials
 ```
+
 
 ## Additional documentation resources and tutorials
 
