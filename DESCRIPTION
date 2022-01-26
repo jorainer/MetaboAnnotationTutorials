@@ -44,6 +44,8 @@ Suggests:
     MetaboCoreUtils,
     pander
 Remotes:
+    RforMassSpectrometry/MetaboCoreUtils,
+    RforMassSpectrometry/Spectra,
     RforMassSpectrometry/CompoundDb,
     RforMassSpectrometry/MetaboAnnotation
 URL: https://jorainer.github.io/MetaboAnnotationTutorials/

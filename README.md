@@ -6,6 +6,8 @@ metabolomics or small compound MS data using the `MetaboAnnotation` and
 
 ## Installation
 
+Requirements: R version >= 4.1 is needed.
+
 The R packages as well as the example files used in this document can be
 installed with the R code below:
 
