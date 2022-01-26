@@ -32,17 +32,18 @@ Depends:
     MetaboAnnotation,
     Spectra,
     CompoundDb
-Suggests:
+Imports:
     xcms,
     Biobase,
-    BiocStyle,
-    knitr,
-    rmarkdown,
     mzR,
     curl,
     MsBackendMgf,
     MetaboCoreUtils,
     pander
+Suggests:
+    BiocStyle,
+    knitr,
+    rmarkdown
 Remotes:
     RforMassSpectrometry/MetaboCoreUtils,
     RforMassSpectrometry/Spectra,
