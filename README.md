@@ -6,14 +6,44 @@ metabolomics or small compound MS data using the `MetaboAnnotation` and
 
 ## Installation
 
-Requirements: R version >= 4.1 is needed.
+Requirements: R version >= 4.1 is needed. Some packages (`MetaboAnnotation` and
+`CompoundDb`) are currently (January 2022) in the developmental branch of
+Bioconductor and become officially part of the Bioconductor release 3.15 in
+April 2022. Thus, these packages need to be installed from their github
+repositories until they become part of the BioC 3.15 release.
 
 The R packages as well as the example files used in this document can be
 installed with the R code below:
 
-```{r, eval = FALSE}
+```r
 install.packages("BiocManager")
 BiocManager::install("jorainer/MetaboAnnotationTutorials")
+```
+
+
+Alternatively, the packages can be installed individually with:
+
+```r
+install.packages("BiocManager")
+BiocManager::install("RforMassSpectrometry/ProtGenerics")
+
+## Packages with low-level core functionality
+BiocManager::install("RforMassSpectrometry/MetaboCoreUtils")
+BiocManager::install("RforMassSpectrometry/MsCoreUtils")
+
+## Packages with high-level user functionality
+BiocManager::install("RforMassSpectrometry/Spectra")
+BiocManager::install("RforMassSpectrometry/MetaboAnnotation")
+BiocManager::install("RforMassSpectrometry/CompoundDb")
+
+## Support for MGF files
+BiocManager::install("RforMassSpectrometry/MsBackendMgf")
+
+## Support for MassBank
+BiocManager::install("RforMassSpectrometry/MsBackendMassbank")
+
+## Support for MSP files
+BiocManager::install("RforMassSpectrometry/MsBackendMsp")
 ```
 
 The source code for this document along with the test data can be downloaded
