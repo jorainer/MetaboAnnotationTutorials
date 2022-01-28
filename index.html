@@ -88,9 +88,33 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>Requirements: R version &gt;= 4.1 is needed.</p>
+<p>Requirements: R version &gt;= 4.1 is needed. Some packages (<code>MetaboAnnotation</code> and <code>CompoundDb</code>) are currently (January 2022) in the developmental branch of Bioconductor and become officially part of the Bioconductor release 3.15 in April 2022. Thus, these packages need to be installed from their github repositories until they become part of the BioC 3.15 release.</p>
 <p>The R packages as well as the example files used in this document can be installed with the R code below:</p>
-<p><code>{r, eval = FALSE} install.packages("BiocManager") BiocManager::install("jorainer/MetaboAnnotationTutorials")</code></p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"jorainer/MetaboAnnotationTutorials"</span><span class="op">)</span></code></pre></div>
+<p>Alternatively, the packages can be installed individually with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"RforMassSpectrometry/ProtGenerics"</span><span class="op">)</span>
+
+<span class="co">## Packages with low-level core functionality</span>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"RforMassSpectrometry/MetaboCoreUtils"</span><span class="op">)</span>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"RforMassSpectrometry/MsCoreUtils"</span><span class="op">)</span>
+
+<span class="co">## Packages with high-level user functionality</span>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"RforMassSpectrometry/Spectra"</span><span class="op">)</span>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"RforMassSpectrometry/MetaboAnnotation"</span><span class="op">)</span>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"RforMassSpectrometry/CompoundDb"</span><span class="op">)</span>
+
+<span class="co">## Support for MGF files</span>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"RforMassSpectrometry/MsBackendMgf"</span><span class="op">)</span>
+
+<span class="co">## Support for MassBank</span>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"RforMassSpectrometry/MsBackendMassbank"</span><span class="op">)</span>
+
+<span class="co">## Support for MSP files</span>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"RforMassSpectrometry/MsBackendMsp"</span><span class="op">)</span></code></pre></div>
 <p>The source code for this document along with the test data can be downloaded from the github repository <a href="https://github.com/jorainer/MetaboAnnotationTutorials" class="external-link uri">https://github.com/jorainer/MetaboAnnotationTutorials</a> with the command (or alternatively downloading the zip archive directly from the github page).</p>
 <pre><code>git clone https://github.com/jorainer/MetaboAnnotationTutorials</code></pre>
 </div>
