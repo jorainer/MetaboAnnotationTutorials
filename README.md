@@ -1,5 +1,43 @@
 # Use Cases and Examples for Annotation of Untargeted Metabolomics Data
 
+<div style="float: left;">
+<a href="https://rformassspectrometry.github.io/MetaboAnnotation">
+<img
+src="https://raw.githubusercontent.com/rformassspectrometry/stickers/master/MetaboAnnotation/MetaboAnnotation.png"
+height="100">
+</a>
+<a href="https://rformassspectrometry.github.io/MetaboCoreUtils">
+<img
+src="https://raw.githubusercontent.com/rformassspectrometry/stickers/master/MetaboCoreUtils/MetaboCoreUtils.png"
+height="100">
+</a>
+<a href="https://rformassspectrometry.github.io/MsCoreUtils">
+<img
+src="https://raw.githubusercontent.com/rformassspectrometry/stickers/master/MsCoreUtils/MsCoreUtils.png"
+height="100">
+</a>
+<a href="https://rformassspectrometry.github.io/Spectra">
+<img
+src="https://raw.githubusercontent.com/rformassspectrometry/stickers/master/Spectra/Spectra.png"
+height="100">
+</a>
+<a href="https://rformassspectrometry.github.io/CompoundDb">
+<img
+src="https://raw.githubusercontent.com/rformassspectrometry/stickers/master/CompoundDb/CompoundDb.png"
+height="100">
+</a>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+<div></div>
+
 This repository provides use cases and examples for the annotation of non-target
 metabolomics or small compound MS data using the `MetaboAnnotation` and
 `MetaboCoreUtils` R packges.
@@ -58,7 +96,7 @@ git clone https://github.com/jorainer/MetaboAnnotationTutorials
 
 ## Additional documentation resources and tutorials
 
-- Tutorial with additional examples and explanations for $MS^2$-based
+- Tutorial with additional examples and explanations for MS2-based
   annotations: https://jorainer.github.io/SpectraTutorials/
 - Repository of the `MsCoreUtils` package:
   https://rformassspectrometry.github.io/MsCoreUtils/
