@@ -1,6 +1,6 @@
 ---
-title: "Use Cases for Metabolomics Data Annotation Using MetaboAnnotation"
-author: "Johannes Rainer, Andrea Vicini, Liesa Salzer, Jan Stanstrup, Josep M Badia,  \nSteffen Neumann, Michael Stravs, Vinicius Verri Hernandes, Laurent Gatto, Sebastian Gibb  \nand Michael Witting"
+title: "Use Cases for Metabolomics Data Annotation Using the `MetaboAnnotation` package"
+author: "Johannes Rainer, Andrea Vicini, Liesa Salzer, Jan Stanstrup, Josep M Badia, Steffen Neumann, Michael Stravs, Vinicius Verri Hernandes, Laurent Gatto, Sebastian Gibb and Michael Witting"
 graphics: yes
 output:
   rmarkdown::html_document
@@ -102,7 +102,7 @@ head(chromPeaks(std_data))
 
 We next annotate these chromatographic peaks using only their *m/z* values. As a
 reference we load a `CompDb` database containing all compounds from the Human
-Metabolom Database [@wishartHMDBHumanMetabolome2018] version 5.0 which is also
+Metabolom Database [@wishart_hmdb_2021] version 5.0 which is also
 provided as a data release on the `MetaboAnnotationTutorials` [github
 repository](https://github.com/jorainer/MetaboAnnotationTutorials). The database
 was build from HMDB 5.0 (2021-11-02) using the `r Biocpkg("CompoundDb")` package
