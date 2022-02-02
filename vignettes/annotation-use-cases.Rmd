@@ -199,8 +199,9 @@ colnames(pks_match)
 
 The n:m mapping is represented in the `matches` data frame. It maps each
 annotated query element to all matching target elements. Below we list the first
-6 rows from that table. Column `"score"` provides the difference between the
-query and target *m/z* values (in Da).
+6 rows from that table. Column `"score"` provides the absolute difference
+between the query and target *m/z* values (in Da) and `"ppm_error"` the ppm
+error.
 
 ```{r}
 head(matches(pks_match))
@@ -580,17 +581,11 @@ table for this matching.
 
 ```{r, results = "asis"}
 res <- spectraData(spectra_match,
-                   c("peak_id", "target_compound_id", "score"))
-cmp_id <- unique(res$target_compound_id)
-cmp_id <- cmp_id[!is.na(cmp_id)]
-cmps <- compounds(cdb, filter = ~ compound_id == cmp_id, "name")
-rownames(cmps) <- cmps$compound_id
-
-res$name <- cmps[res$target_compound_id, "name"]
+                   c("peak_id", "target_compound_id",
+                     "target_name", "score"))
 rownames(res) <- NULL
 pandoc.table(as.data.frame(res),
     style = "rmarkdown", split.tables = Inf)
-
 ```
 
 Matching results can also be very easily visualized with the `plotSpectraMirror`
@@ -683,7 +678,7 @@ Files in MGF format can be imported with the `r Biocpkg("MsBackendMgf")`
 package. Below we use this package to create a `Spectra` object with all spectra
 from the example file.
 
-```{r}
+```{r, message = FALSE}
 library(MsBackendMgf)
 sps_mgf <- Spectra(file.path(tempdir(), s_file),
                    source = MsBackendMgf())

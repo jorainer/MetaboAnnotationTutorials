@@ -1,6 +1,6 @@
 Package: MetaboAnnotationTutorials
 Title: Metabolomics Data Annotation Using MetaboAnnotation
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
 	     person(given = "Johannes", family = "Rainer",
 		    email = "Johannes.Rainer@eurac.edu",
@@ -29,9 +29,9 @@ LazyData: false
 Roxygen: list(markdown = TRUE)
 Depends:
     R (>= 4.1),
-    MetaboAnnotation,
-    Spectra,
-    CompoundDb
+    MetaboAnnotation (>= 0.99.4),
+    Spectra (>= 1.5.8),
+    CompoundDb (>= 0.99.6)
 Imports:
     xcms,
     Biobase,
@@ -48,7 +48,8 @@ Remotes:
     RforMassSpectrometry/MetaboCoreUtils,
     RforMassSpectrometry/Spectra,
     RforMassSpectrometry/CompoundDb,
-    RforMassSpectrometry/MetaboAnnotation
+    RforMassSpectrometry/MetaboAnnotation,
+    RforMassSpectrometry/MsBackendMgf
 URL: https://jorainer.github.io/MetaboAnnotationTutorials/
 BugReports: https://github.com/jorainer/MetaboAnnotationTutorials/issues/new
 VignetteBuilder: knitr
