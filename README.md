@@ -1,38 +1,14 @@
 # Use Cases and Examples for Annotation of Untargeted Metabolomics Data
 
-<div style="float: left;">
-<a href="https://rformassspectrometry.github.io/MetaboAnnotation">
-<img
-src="https://raw.githubusercontent.com/rformassspectrometry/stickers/master/MetaboAnnotation/MetaboAnnotation.png"
-height="100">
-</a>
-<a href="https://rformassspectrometry.github.io/MetaboCoreUtils">
-<img
-src="https://raw.githubusercontent.com/rformassspectrometry/stickers/master/MetaboCoreUtils/MetaboCoreUtils.png"
-height="100">
-</a>
-<a href="https://rformassspectrometry.github.io/MsCoreUtils">
-<img
-src="https://raw.githubusercontent.com/rformassspectrometry/stickers/master/MsCoreUtils/MsCoreUtils.png"
-height="100">
-</a>
-<a href="https://rformassspectrometry.github.io/Spectra">
-<img
-src="https://raw.githubusercontent.com/rformassspectrometry/stickers/master/Spectra/Spectra.png"
-height="100">
-</a>
-<a href="https://rformassspectrometry.github.io/CompoundDb">
-<img
-src="https://raw.githubusercontent.com/rformassspectrometry/stickers/master/CompoundDb/CompoundDb.png"
-height="100">
-</a>
-</div>
-<br>
-<br>
-<br>
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 
-
-<div></div>
+![MetaboAnnotation](man/figures/MetaboAnnotation.png)
+![MetaboCoreUtils](man/figures/MetaboCoreUtils.png)
+![Spectra](man/figures/Spectra.png)
+![MsCoreUtils](man/figures/MsCoreUtils.png)
+![MsBackendMassbank](man/figures/MsBackendMassbank.png)
+![MsBackendMgf](man/figures/MsBackendMgf.png)
+![CompoundDb](man/figures/CompoundDb.png)
 
 This repository provides use cases and examples for the annotation of non-target
 metabolomics or small compound MS data using the `MetaboAnnotation` and
