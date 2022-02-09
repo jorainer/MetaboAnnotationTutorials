@@ -199,7 +199,7 @@ colnames(pks_match)
 
 The n:m mapping is represented in the `matches` data frame. It maps each
 annotated query element to all matching target elements. Below we list the first
-6 rows from that table. Column `"score"` provides the absolute difference
+6 rows from that table. Column `"score"` provides the difference
 between the query and target *m/z* values (in Da) and `"ppm_error"` the ppm
 error.
 
