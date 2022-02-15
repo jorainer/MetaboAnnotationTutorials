@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">MetaboAnnotationTutorials</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,7 +88,7 @@
 
     
     
-<p>This documents provides use cases describing the annotation of untarget metabolomics and small compound datasets using functionality from the <em><a href="https://bioconductor.org/packages/3.14/MetaboAnnotation" class="external-link">MetaboAnnotation</a></em>, <em><a href="https://bioconductor.org/packages/3.14/MetaboCoreUtils" class="external-link">MetaboCoreUtils</a></em> and <em><a href="https://bioconductor.org/packages/3.14/CompoundDb" class="external-link">CompoundDb</a></em> packages. All data used in this document is available within the <a href="https://github.com/jorainer/MetaboAnnotationTutorials" class="external-link">github repository</a> <a href="https://github.com/jorainer/MetaboAnnotationTutorials" class="external-link uri">https://github.com/jorainer/MetaboAnnotationTutorials</a>. Additional use cases and examples can be found in the packages’ vignettes and workshops/tutorials. See section <em>Package repositories and additional tutorials</em> for links to the package repositories and tutorials.</p>
+<p>This documents provides use cases describing the annotation of untarget metabolomics and small compound datasets using functionality from the <code>r Biocpkg("MetaboAnnotation")</code>, <em><a href="https://bioconductor.org/packages/3.14/MetaboCoreUtils" class="external-link">MetaboCoreUtils</a></em> and <code>r Biocpkg("CompoundDb")</code> packages <span class="citation">(Rainer et al. 2022)</span>. All data used in this document is available within the <a href="https://github.com/jorainer/MetaboAnnotationTutorials" class="external-link">github repository</a> <a href="https://github.com/jorainer/MetaboAnnotationTutorials" class="external-link uri">https://github.com/jorainer/MetaboAnnotationTutorials</a>. Additional use cases and examples can be found in the packages’ vignettes and workshops/tutorials. See section <em>Package repositories and additional tutorials</em> for links to the package repositories and tutorials.</p>
 <div class="section level2">
 <h2 id="installation-instructions">Installation instructions<a class="anchor" aria-label="anchor" href="#installation-instructions"></a>
 </h2>
@@ -705,7 +705,7 @@
 <span class="co">## HighIS_Mix07_CE20_POS.mzML</span>
 <span class="co">## Lazy evaluation queue: 1 processing step(s)</span>
 <span class="co">## Processing:</span>
-<span class="co">##  Remove peaks based on their intensities and a user-provided function in spectra of MS level(s) 2. [Wed Feb  9 10:34:37 2022]</span></code></pre>
+<span class="co">##  Remove peaks based on their intensities and a user-provided function in spectra of MS level(s) 2. [Tue Feb 15 13:11:22 2022]</span></code></pre>
 <p>In addition, we scale the peak intensities within each spectrum to values between 0 and 100. This is mostly for visualization reason, since most spectra similarity scoring algorithms are independent of absolute peak intensities.</p>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#' Define a function to *scale* the intensities</span>
@@ -1030,8 +1030,8 @@
 <span class="co">## [8] base     </span>
 <span class="co">## </span>
 <span class="co">## other attached packages:</span>
-<span class="co">##  [1] MsBackendMgf_1.3.2      Spectra_1.5.8           MetaboCoreUtils_1.3.5  </span>
-<span class="co">##  [4] pander_0.6.4            MetaboAnnotation_0.99.5 CompoundDb_0.99.7      </span>
+<span class="co">##  [1] MsBackendMgf_1.3.2      Spectra_1.5.8           MetaboCoreUtils_1.3.7  </span>
+<span class="co">##  [4] pander_0.6.4            MetaboAnnotation_0.99.6 CompoundDb_0.99.8      </span>
 <span class="co">##  [7] AnnotationFilter_1.18.0 curl_4.3.2              xcms_3.16.1            </span>
 <span class="co">## [10] MSnbase_2.20.4          ProtGenerics_1.26.0     S4Vectors_0.32.3       </span>
 <span class="co">## [13] mzR_2.28.0              Rcpp_1.0.8              Biobase_2.54.0         </span>
@@ -1059,7 +1059,7 @@
 <span class="co">##  [35] tools_4.1.2                 gtable_0.3.0               </span>
 <span class="co">##  [37] glue_1.6.1                  GenomeInfoDbData_1.2.7     </span>
 <span class="co">##  [39] affy_1.72.0                 RANN_2.6.1                 </span>
-<span class="co">##  [41] dplyr_1.0.7                 rsvg_2.2.0                 </span>
+<span class="co">##  [41] dplyr_1.0.8                 rsvg_2.2.0                 </span>
 <span class="co">##  [43] MALDIquant_1.21             jquerylib_0.1.4            </span>
 <span class="co">##  [45] pkgdown_2.0.2.9000          vctrs_0.3.8                </span>
 <span class="co">##  [47] preprocessCore_1.56.0       iterators_1.0.14           </span>
@@ -1077,7 +1077,7 @@
 <span class="co">##  [71] RSQLite_2.2.9               highr_0.9                  </span>
 <span class="co">##  [73] desc_1.4.0                  foreach_1.5.2              </span>
 <span class="co">##  [75] GenomeInfoDb_1.30.1         rlang_1.0.1                </span>
-<span class="co">##  [77] pkgconfig_2.0.3             systemfonts_1.0.3          </span>
+<span class="co">##  [77] pkgconfig_2.0.3             systemfonts_1.0.4          </span>
 <span class="co">##  [79] matrixStats_0.61.0          bitops_1.0-7               </span>
 <span class="co">##  [81] mzID_1.32.0                 evaluate_0.14              </span>
 <span class="co">##  [83] lattice_0.20-45             purrr_0.3.4                </span>
@@ -1087,7 +1087,7 @@
 <span class="co">##  [91] R6_2.5.1                    IRanges_2.28.0             </span>
 <span class="co">##  [93] generics_0.1.2              DelayedArray_0.20.0        </span>
 <span class="co">##  [95] DBI_1.1.2                   pillar_1.7.0               </span>
-<span class="co">##  [97] MsCoreUtils_1.6.0           RCurl_1.98-1.5             </span>
+<span class="co">##  [97] MsCoreUtils_1.6.0           RCurl_1.98-1.6             </span>
 <span class="co">##  [99] tibble_3.1.6                crayon_1.4.2               </span>
 <span class="co">## [101] utf8_1.2.2                  rmarkdown_2.11             </span>
 <span class="co">## [103] grid_4.1.2                  blob_1.2.2                 </span>
@@ -1100,6 +1100,9 @@
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-nothias_feature-based_2020" class="csl-entry">
 Nothias, Louis-Félix, Daniel Petras, Robin Schmid, Kai Dührkop, Johannes Rainer, Abinesh Sarvepalli, Ivan Protsyuk, et al. 2020. <span>“Feature-Based Molecular Networking in the <span>GNPS</span> Analysis Environment.”</span> <em>Nature Methods</em> 17 (9): 905–8. <a href="https://doi.org/10.1038/s41592-020-0933-6" class="external-link">https://doi.org/10.1038/s41592-020-0933-6</a>.
+</div>
+<div id="ref-rainer_modular_2022" class="csl-entry">
+Rainer, Johannes, Andrea Vicini, Liesa Salzer, Jan Stanstrup, Josep M. Badia, Steffen Neumann, Michael A. Stravs, et al. 2022. <span>“A <span>Modular</span> and <span>Expandable</span> <span>Ecosystem</span> for <span>Metabolomics</span> <span>Data</span> <span>Annotation</span> in <span>R</span>.”</span> <em>Metabolites</em> 12 (2): 173. <a href="https://doi.org/10.3390/metabo12020173" class="external-link">https://doi.org/10.3390/metabo12020173</a>.
 </div>
 <div id="ref-stoffelNAlkylpyridiniumSulfonatesRetention2021" class="csl-entry">
 Stoffel, Rainer, Michael A. Quilliam, Normand Hardt, Anders Fridstrom, and Michael Witting. 2021. <span>“N-<span>Alkylpyridinium</span> Sulfonates for Retention Time Indexing in Reversed-Phase-Liquid Chromatography-Mass Spectrometry–Based Metabolomics.”</span> <em>Analytical and Bioanalytical Chemistry</em>, December. <a href="https://doi.org/10.1007/s00216-021-03828-0" class="external-link">https://doi.org/10.1007/s00216-021-03828-0</a>.
