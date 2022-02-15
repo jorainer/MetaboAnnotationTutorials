@@ -12,7 +12,10 @@
 
 This repository provides use cases and examples for the annotation of non-target
 metabolomics or small compound MS data using the `MetaboAnnotation` and
-`MetaboCoreUtils` R packges.
+`MetaboCoreUtils` R packages. Refer to the original article [A Modular and
+Expandable Ecosystem for Metabolomics Data Annotation in
+R](https://doi.org/10.3390/metabo12020173) to **cite** this package/repository
+or any functionality described here.
 
 ## Installation
 

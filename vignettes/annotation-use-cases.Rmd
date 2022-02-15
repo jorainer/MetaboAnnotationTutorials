@@ -22,10 +22,10 @@ opts_chunk$set(message = FALSE, warning = FALSE, fig.width = 8, fig.height = 7,
 ```
 
 This documents provides use cases describing the annotation of untarget
-metabolomics and small compound datasets using functionality from the
-`r Biocpkg("MetaboAnnotation")`, `r Biocpkg("MetaboCoreUtils")` and
-`r Biocpkg("CompoundDb")` packages. All data used in this document is available
-within the [github
+metabolomics and small compound datasets using functionality from the `r
+Biocpkg("MetaboAnnotation")`, `r Biocpkg("MetaboCoreUtils")` and `r
+Biocpkg("CompoundDb")` packages [@rainer_modular_2022]. All data used in this
+document is available within the [github
 repository](https://github.com/jorainer/MetaboAnnotationTutorials)
 https://github.com/jorainer/MetaboAnnotationTutorials. Additional use cases and
 examples can be found in the packages' vignettes and workshops/tutorials. See

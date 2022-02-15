@@ -1,5 +1,9 @@
 # MetaboAnnotationTutorials 0.1
 
+## Changes in 0.1.2
+
+- Add reference and citation.
+
 ## Changes in 0.1.1
 
 - Adapt to changes in `Spectra` >= 1.5.8.
