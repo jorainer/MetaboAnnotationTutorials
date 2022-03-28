@@ -45,6 +45,8 @@ Suggests:
     knitr,
     rmarkdown
 Remotes:
+    RforMassSpectrometry/ProtGenerics,
+    RforMassSpectrometry/MsCoreUtils,
     RforMassSpectrometry/MetaboCoreUtils,
     RforMassSpectrometry/Spectra,
     RforMassSpectrometry/CompoundDb,

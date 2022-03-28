@@ -30,7 +30,8 @@ installed with the R code below:
 
 ```r
 install.packages("BiocManager")
-BiocManager::install("jorainer/MetaboAnnotationTutorials")
+BiocManager::install("jorainer/MetaboAnnotationTutorials",
+    dependencies = TRUE, ask = FALSE, update = TRUE)
 ```
 
 
@@ -41,8 +42,8 @@ install.packages("BiocManager")
 BiocManager::install("RforMassSpectrometry/ProtGenerics")
 
 ## Packages with low-level core functionality
-BiocManager::install("RforMassSpectrometry/MetaboCoreUtils")
 BiocManager::install("RforMassSpectrometry/MsCoreUtils")
+BiocManager::install("RforMassSpectrometry/MetaboCoreUtils")
 
 ## Packages with high-level user functionality
 BiocManager::install("RforMassSpectrometry/Spectra")

@@ -39,7 +39,8 @@ installed with the R code below:
 
 ```{r, eval = FALSE}
 install.packages("BiocManager")
-BiocManager::install("jorainer/MetaboAnnotationTutorials")
+BiocManager::install("jorainer/MetaboAnnotationTutorials",
+    dependencies = TRUE, ask = FALSE, update = TRUE)
 ```
 
 The source code for this document along with the test data can be downloaded
