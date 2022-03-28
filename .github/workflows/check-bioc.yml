@@ -52,7 +52,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - { os: ubuntu-latest, r: '4.1', bioc: '3.14', cont: "bioconductor/bioconductor_docker:RELEASE_3_14", rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest" }
+          - { os: ubuntu-latest, r: 'devel', bioc: '3.15', cont: "bioconductor/bioconductor_docker:devel", rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest" }
           - { os: macOS-latest, r: '4.1', bioc: '3.14'}
           - { os: windows-latest, r: '4.1', bioc: '3.14'}
     env:
@@ -181,7 +181,8 @@ jobs:
           ## Ideally, all dependencies should get installed in the first pass.
           BiocManager::install("rmarkdown", dependencies = TRUE, ask = FALSE, update = FALSE)
           BiocManager::install("BiocStyle", dependencies = TRUE, ask = FALSE, update = FALSE)
-          BiocManager::install("mzR", dependencies = TRUE, ask = FALSE, update=FALSE)
+          BiocManager::install("sneumann/mzR", dependencies = TRUE, ask = FALSE, update=FALSE)
+          BiocManager::install("RforMassSpectrometry/ProtGenerics", dependencies = TRUE, ask = FALSE, update=FALSE)
 
           ## Pass #1 at installing dependencies
           message(paste('****', Sys.time(), 'pass number 1 at installing dependencies: local dependencies ****'))
@@ -193,7 +194,7 @@ jobs:
 
           ## Manually install required packages
           BiocManager::install('rhdf5', dependencies = TRUE, ask = FALSE, update = FALSE, INSTALL_opts = '--force-biarch')
-          BiocManager::install("mzR", dependencies = TRUE, ask = FALSE, update=FALSE)
+          BiocManager::install("sneumann/mzR", dependencies = TRUE, ask = FALSE, update=FALSE)
           BiocManager::install("SummarizedExperiment", ask = FALSE, update = FALSE)
           remotes::install_github("jorainer/MetaboAnnotationTutorials")
           # BiocManager::install(c("devtools", "usethis", "vdiffr"), dependencies = TRUE, ask = FALSE, update = FALSE)
