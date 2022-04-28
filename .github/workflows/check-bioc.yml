@@ -120,8 +120,8 @@ jobs:
           sysreqs=$(Rscript -e 'cat("apt-get update -y && apt-get install -y", paste(gsub("apt-get install -y ", "", remotes::system_requirements("ubuntu", "20.04")), collapse = " "))')
           echo $sysreqs
           sudo -s eval "$sysreqs"
-          curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
-          sudo apt-get install -y git-lfs
+          ## curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+          ## sudo apt-get install -y git-lfs
 
       - name: Install macOS system dependencies
         if: matrix.config.os == 'macOS-latest'
@@ -140,7 +140,7 @@ jobs:
           brew install libgit2
           ## Helps compile RCurl from source
           ## brew uninstall curl
-          brew install git git-lfs
+          ## brew install git git-lfs
 
           ## required for ncdf4 - can not use the homebrew one because that uses GCC
           ## Use pre-compiled libraries from https://mac.r-project.org/libs-4/
