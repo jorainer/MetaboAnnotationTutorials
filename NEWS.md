@@ -1,5 +1,9 @@
 # MetaboAnnotationTutorials 0.1
 
+## Changes in 0.1.3
+
+- Update installation instructions.
+
 ## Changes in 0.1.2
 
 - Add reference and citation.

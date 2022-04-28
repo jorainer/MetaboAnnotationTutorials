@@ -1,6 +1,6 @@
 Package: MetaboAnnotationTutorials
 Title: Metabolomics Data Annotation Using MetaboAnnotation
-Version: 0.1.2
+Version: 0.1.3
 Authors@R: c(
 	     person(given = "Johannes", family = "Rainer",
 		    email = "Johannes.Rainer@eurac.edu",
@@ -44,14 +44,6 @@ Suggests:
     BiocStyle,
     knitr,
     rmarkdown
-Remotes:
-    RforMassSpectrometry/ProtGenerics,
-    RforMassSpectrometry/MsCoreUtils,
-    RforMassSpectrometry/MetaboCoreUtils,
-    RforMassSpectrometry/Spectra,
-    RforMassSpectrometry/CompoundDb,
-    RforMassSpectrometry/MetaboAnnotation,
-    RforMassSpectrometry/MsBackendMgf
 URL: https://jorainer.github.io/MetaboAnnotationTutorials/
 BugReports: https://github.com/jorainer/MetaboAnnotationTutorials/issues/new
 VignetteBuilder: knitr
