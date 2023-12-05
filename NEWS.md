@@ -1,3 +1,10 @@
+# MetaboAnnotationTutorials 0.2
+
+## Changes in 0.2
+
+- Use R 4.3 and Bioconductor 3.18.
+
+
 # MetaboAnnotationTutorials 0.1
 
 ## Changes in 0.1.3
